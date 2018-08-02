@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>提示信息</title>
+	<style type="text/css">
+		#msg{background-color:#5FB878;padding:10px;width:300px;text-align:left;color:#fff;font-size:14px;}
+		#main{padding:10px;width:298px;border:1px solid #2F4056;border-top:0px;}
+		#res{color:#2F4056;font-size:18px;margin-bottom: 50px;}
+		#jump{color:#666;font-size:14px;}
+		#returnindex{color:#666;}
+	</style>
+</head>
+<body>
+	<center>
+		<div id="msg">提示</div>
+		<div id="main">
+			<p id="res"><?php echo $msg;?> !</p>
+			<p id="jump"><span id="count"><?php echo $time;?></span>秒钟之后将进行跳转<br><a id="returnindex" href="<?php echo __ROOT__;?>">返回首页</a></p>
+		</div>
+	</center>
+
+	<script type="text/javascript">
+		var time = document.getElementById("count").innerHTML;
+		function revTime(){
+			time--;
+			if(time >= 0){
+				document.getElementById("count").innerHTML = time;
+			}
+			if (time == 0){
+				window.location.href = <?php echo $url;?>;
+			}
+		}
+		setInterval("revTime()", 1000);
+	</script>
+</body>
+</html>
