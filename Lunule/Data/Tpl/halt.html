@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>提示信息</title>
+    <style type="text/css">
+        body{padding:30px;}
+        #msgicon{font-size:60px;}
+        #msginfo{font-size:20px;margin-top:10px;font-weight:bold;}
+        #file{margin-top:20px;}
+        #location{font-weight:bold;}
+        #trace{margin-top:20px;font-weight:bold;}
+        #version{margin-top:20px;color:#888;}
+    </style>
+</head>
+<body>
+    <div id="msg">
+        <div id="msgicon">
+            :( 
+        </div>
+        <div id="msginfo">
+            <?php echo $e['msg'];?>
+        </div>
+    </div>
+
+    <?php if (DEBUG && isset($e['file'])): ?>
+    <div id="file">
+        <div id="location">
+            错误位置:
+        </div>
+        <div id="errorlocation">
+            FILE: <?php echo $e['file'] . ' Line: ' . $e['line']; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <?php if (isset($e['trace'])): ?>
+    <div id="trace">
+        Trace:
+    </div>
+    <div id="traceinfo">
+        <?php echo nl2br($e['trace']); ?>
+    </div>
+    <?php endif; ?>
+
+    <div id="version">
+       Lunule V<?php echo LUNULE_VERSION; ?> 
+    </div>
+    
+</body>
+</html>

@@ -1,4 +1,5 @@
-<?php  
+<?php
+
 /**
  * 应用类
  */
@@ -6,6 +7,7 @@
 final class Application
 {
 	public static function run() {
+		header('Content-type:text/html;charset=utf-8');
 		self::_init();
 		self::_set_url();
 		spl_autoload_register([__CLASS__, '_autoload']);
@@ -20,9 +22,20 @@ final class Application
 		// 加载系统的配置项
 		config(include CONFIG_PATH . '/config.php');
 
-		// 用户的配置项
-		$userConfigPath = APP_CONFIG_PATH . '/config.php';
+		// 加载公共的配置项
+		$commonConfigPath = COMMON_CONFIG_PATH . '/config.php';
+		$commonConfig = <<<str
+<?php
 
+return [
+	// 配置项 => 配置值
+];
+str;
+		is_file($commonConfigPath) || file_put_contents($commonConfigPath, $commonConfig);
+		config(include $commonConfigPath);
+
+		// 加载用户的配置项
+		$userConfigPath = APP_CONFIG_PATH . '/config.php';
 		$userConfig = <<<str
 <?php
 
@@ -31,8 +44,6 @@ return [
 ];
 str;
 		is_file($userConfigPath) || file_put_contents($userConfigPath, $userConfig);
-
-		// 加载用户的配置项
 		config(include $userConfigPath);
 
 		// 设置默认时区
@@ -86,12 +97,16 @@ str;
 	 */
 	private static function _app_run() {
 		$c = isset($_GET[config('VAR_CONTROLLER')]) ? $_GET[config('VAR_CONTROLLER')] : 'Index';
-		$c .= 'Controller';
-
 		$a = isset($_GET[config('VAR_ACTION')]) ? $_GET[config('VAR_ACTION')] : 'index';
 		
+		define('CONTROLLER', $c);
+		define('ACTION', $a);
+
+		$c .= 'Controller';
 		$obj = new $c();
 		$obj->$a();
 	}
 
 }
+
+?>
