@@ -9,4 +9,5 @@ return [
 	'SAVE_LOG' => TRUE, 			// 是否开启日志
 	'ERROR_URL' => '',				// 错误跳转地址
 	'ERROR_MSG' => '系统出错, 请稍后再试...',				// 错误提示信息
+	'AUTO_LOAD_FILE' => [],			// 自动加载Common/Lib目录下的指定的一个或多个文件
 ];

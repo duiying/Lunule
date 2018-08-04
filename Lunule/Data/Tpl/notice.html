@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>提示信息</title>
+    <style type="text/css">
+        body{padding:30px;}
+        .main{border:1px solid #ccc;margin-bottom:20px;padding:10px;}
+        .file{margin-top:20px;}
+        .location{font-weight:bold;}
+        #version{margin-top:20px;color:#888;}
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="file">
+            <div class="location">
+                错误信息:
+            </div>
+            <div class="errorlocation">
+               Info: <?php echo $errmsg; ?>
+            </div>
+        </div>
+
+        <div class="file">
+            <div class="location">
+                错误级别:
+            </div>
+            <div class="errorlocation">
+                Severity: <?php echo $errno; ?>
+            </div>
+        </div>
+
+        <div class="file">
+            <div class="location">
+                错误文件:
+            </div>
+            <div class="errorlocation">
+                File: <?php echo $errfile; ?>
+            </div>
+        </div>
+       
+        <div class="file">
+            <div class="location">
+                错误行号:
+            </div>
+            <div class="errorlocation">
+                Line: <?php echo $errline; ?>
+            </div>
+        </div>
+
+        <div id="version">
+           Lunule V<?php echo LUNULE_VERSION; ?> 
+        </div>
+    </div>
+    
+</body>
+</html>

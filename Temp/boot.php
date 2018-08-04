@@ -235,6 +235,9 @@ final class Application
 	public static function run() {
 		header('Content-type:text/html;charset=utf-8');
 		self::_init();
+		set_error_handler([__CLASS__, 'error']);
+		register_shutdown_function([__CLASS__, 'fatal_error']);
+		self::_user_import();
 		self::_set_url();
 		spl_autoload_register([__CLASS__, '_autoload']);
 		self:: _create_demo();
@@ -281,6 +284,57 @@ str;
 	}
 
 	/**
+	 * 异常处理
+	 * @param integer $errno 错误级别
+	 * @param string $errmsg 错误信息
+	 * @param string $errfile 错误文件
+	 * @param integer $errline 错误行号
+	 */
+	public static function error($errno, $errmsg, $errfile, $errline) {
+		switch ($errno) {
+			case E_ERROR:
+			case E_PARSE:
+			case E_CORE_ERROR:
+			case E_COMPILE_ERROR:
+			case E_USER_ERROR:
+				$msg = $errmsg . $errfile . " 第{$errline}行 ";
+				halt($errmsg);
+				break;
+
+			case 'E_STRICT':
+			case 'E_USER_WARNING':
+			case 'E_USER_NOTICE':
+			default:
+				if (DEBUG) {
+					include DATA_PATH . '/Tpl/notice.html';
+				}
+				break;
+		}
+	}
+
+	/**
+	 * 错误处理
+	 */
+	public static function fatal_error() {
+		if ($e = error_get_last()) {
+			self::error($e['type'], $e['message'], $e['file'], $e['line']);
+		}
+	}
+
+	/**
+	 * 用户自定义扩展功能
+	 */
+	private static function _user_import() {
+		$fileArr = config('AUTO_LOAD_FILE');
+		if (is_array($fileArr) && !empty($fileArr)) {
+			// 自动加载Common/Lib目录下的指定的一个或多个文件
+			foreach ($fileArr as $v) {
+				require_once COMMON_LIB_PATH . '/' . $v;
+			}
+		}
+	}
+
+	/**
 	 * 设置外部路径
 	 */
 	private static function _set_url() {
@@ -296,7 +350,27 @@ str;
 	 * 自动载入功能
 	 */
 	private static function _autoload($className) {
-		include APP_CONTROLLER_PATH . '/' . $className . '.class.php';
+		switch (true) {
+			case strlen($className) > 10 && substr($className, -10) == 'Controller':
+				$path = APP_CONTROLLER_PATH . '/' . $className . '.class.php';
+				if (!is_file($path)) {
+					$emptyPath = APP_CONTROLLER_PATH . '/EmptyController.class.php';
+					if (is_file($emptyPath)) {
+						include $emptyPath;
+						return;
+					} else {
+						halt($path . '控制器未找到');
+					}
+				}
+				include $path;
+				break;
+
+			default:
+				$path = TOOL_PATH . '/' . $className . '.class.php';
+				if (!is_file($path)) halt($path . '类未找到');
+				include $path;
+				break;
+		}
 	}
 
 	/**
@@ -329,8 +403,23 @@ str;
 		define('ACTION', $a);
 
 		$c .= 'Controller';
-		$obj = new $c();
-		$obj->$a();
+
+
+		if (class_exists($c)) {
+			$obj = new $c();
+			if (!method_exists($obj, $a)) {
+				if (method_exists($obj, '__empty')) {
+					$obj->__empty();
+				} else {
+					halt($c . '控制器中' . $a . '方法不存在');
+				}
+			} else {
+				$obj->$a();
+			}
+		} else {
+			$obj = new EmptyController();
+			$obj->index();
+		}
 	}
 
 }

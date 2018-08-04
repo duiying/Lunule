@@ -56,6 +56,13 @@ final class Lunule
 		// 公共库目录
 		define('COMMON_LIB_PATH', COMMON_PATH . '/Lib');
 
+		// 框架扩展类库目录
+		define('EXTENDS_PATH', LUNULE_PATH . '/Extends');
+		// 工具类库目录(验证码类,图像类等等)
+		define('TOOL_PATH', EXTENDS_PATH . '/Tool');		
+		// 第三方类库目录(Smarty等)
+		define('ORG_PATH', EXTENDS_PATH . '/Org');
+
 		define('LUNULE_VERSION', '1.0');
 
 		define('IS_POST', ($_SERVER['REQUEST_METHOD'] == 'POST') ? TRUE : FALSE);
