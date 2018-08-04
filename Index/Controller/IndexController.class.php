@@ -6,6 +6,7 @@ class IndexController extends Controller
 		echo 'empty method';
 	}
 	public function index() {
-		fda
+		$data = model('link')->where('link_id = 6')->delete();
+		p($data);
 	}
 }	

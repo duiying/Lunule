@@ -35,7 +35,7 @@ function go($url, $time = 0, $msg = '') {
 }
 
 /**
- * 错误处理
+ * 错误打印
  * @param mixed $error 错误信息
  * @param string $level 错误级别
  * @param integer $type 设置错误信息应该发送到何处 3表示错误信息被发送到$dest的文件里
@@ -121,6 +121,15 @@ function config($var = NULL, $value = NULL) {
 	if (is_null($var) && is_null($value)) {
 		return $config;
 	}
+}
+
+/**
+ * 实例化模型类
+ * @param string $table 表名
+ */
+function model($table) {
+	$obj = new Model($table);
+	return $obj;
 }
 
 
@@ -297,8 +306,8 @@ str;
 			case E_CORE_ERROR:
 			case E_COMPILE_ERROR:
 			case E_USER_ERROR:
-				$msg = $errmsg . $errfile . " 第{$errline}行 ";
-				halt($errmsg);
+				$msg = $errmsg . '<br/>' . $errfile . " 第{$errline}行 ";
+				halt($msg);
 				break;
 
 			case 'E_STRICT':

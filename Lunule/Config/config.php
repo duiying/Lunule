@@ -10,4 +10,12 @@ return [
 	'ERROR_URL' => '',				// 错误跳转地址
 	'ERROR_MSG' => '系统出错, 请稍后再试...',				// 错误提示信息
 	'AUTO_LOAD_FILE' => [],			// 自动加载Common/Lib目录下的指定的一个或多个文件
+
+	'DB_CHARSET' => 'utf8',
+	'DB_HOST' => '127.0.0.1',
+	'DB_PORT' => 3306,
+	'DB_USER' => 'root',
+	'DB_PASSWORD' => '',
+	'DB_DATABASE' => '',
+	'DB_PREFIX' => '',
 ];

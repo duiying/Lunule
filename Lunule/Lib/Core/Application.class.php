@@ -71,8 +71,8 @@ str;
 			case E_CORE_ERROR:
 			case E_COMPILE_ERROR:
 			case E_USER_ERROR:
-				$msg = $errmsg . $errfile . " 第{$errline}行 ";
-				halt($errmsg);
+				$msg = $errmsg . '<br/>' . $errfile . " 第{$errline}行 ";
+				halt($msg);
 				break;
 
 			case 'E_STRICT':
