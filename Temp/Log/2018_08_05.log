@@ -1,0 +1,10 @@
+[TIME]: 2018-08-05 08:37:14 ERROR: C:/kfrj/xampp/htdocs/Lunule/Lunule/Extends/Tool/LinkModel.class.php类未找到
+[TIME]: 2018-08-05 08:41:56 ERROR: MySQL错误: Table 'blog.live_' doesn't exist<br/>SQL: SELECT * FROM live_
+[TIME]: 2018-08-05 09:59:50 ERROR: C:/kfrj/xampp/htdocs/Lunule/Index/Tpl/Index/index.html模板文件不存在
+[TIME]: 2018-08-05 10:00:04 ERROR: C:/kfrj/xampp/htdocs/Lunule/Index/Tpl/Index/index.html模板文件不存在
+[TIME]: 2018-08-05 10:15:50 ERROR: C:/kfrj/xampp/htdocs/Lunule/Lunule/Extends/Tool/Smarty_Internal_Method_Is_Cached.class.php类未找到
+[TIME]: 2018-08-05 10:17:25 ERROR: C:/kfrj/xampp/htdocs/Lunule/Lunule/Extends/Tool/Smarty_Internal_Method_Is_Cached.class.php类未找到
+[TIME]: 2018-08-05 10:17:28 ERROR: C:/kfrj/xampp/htdocs/Lunule/Lunule/Extends/Tool/Smarty_Internal_Method_Is_Cached.class.php类未找到
+[TIME]: 2018-08-05 10:28:16 ERROR: C:/kfrj/xampp/htdocs/Lunule/Lunule/Extends/Tool/Smarty_Internal_Method_Is_Cached.class.php类未找到
+[TIME]: 2018-08-05 10:36:23 ERROR: C:/kfrj/xampp/htdocs/Lunule/Index/Tpl/Index/index.html模板文件不存在
+[TIME]: 2018-08-05 10:38:02 ERROR: Call to undefined method Smarty::isCached()<br/>C:\kfrj\xampp\htdocs\Lunule\Lunule\Lib\Core\SmartyView.class.php 第41行 

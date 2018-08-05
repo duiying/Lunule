@@ -139,6 +139,11 @@ str;
 				include $path;
 				break;
 
+			case strlen($className) > 5 && substr($className, -5) == 'Model':
+				$path = COMMON_MODEL_PATH . '/' . $className . '.class.php';
+				include $path;
+				break;
+
 			default:
 				$path = TOOL_PATH . '/' . $className . '.class.php';
 				if (!is_file($path)) halt($path . '类未找到');

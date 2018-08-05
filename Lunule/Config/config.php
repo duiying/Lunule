@@ -18,4 +18,11 @@ return [
 	'DB_PASSWORD' => '',
 	'DB_DATABASE' => '',
 	'DB_PREFIX' => '',
+
+	// smarty
+	'SMARTY_ON' => TRUE,
+	'LEFT_DELIMITER' => '{',
+	'RIGHT_DELIMITER' => '}',
+	'CACHE_ON' => TRUE,
+	'CACHE_TIME' => 5,
 ];

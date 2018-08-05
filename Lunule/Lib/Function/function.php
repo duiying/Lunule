@@ -131,4 +131,13 @@ function model($table) {
 	return $obj;
 }
 
+/**
+ * 实例化扩展模型类
+ * @param string $model 扩展模型
+ */
+function ext_model($model) {
+	$model .= 'Model';
+	return new $model;
+}
+
 ?>

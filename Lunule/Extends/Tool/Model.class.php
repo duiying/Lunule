@@ -6,7 +6,7 @@ class Model
 	// 保存连接信息
 	public static $link = NULL;
 	// 保存表名
-	private $table = NULL;
+	protected $table = NULL;
 	// 初始化表信息
 	private $opt;
 	// 记录发送的sql
@@ -172,6 +172,55 @@ class Model
 		if (empty($this->opt['where'])) halt('删除语句必须有sql语句');
 		$sql = "DELETE FROM " . $this->table . $this->opt['where'];
 		return $this->exe($sql);
+	}
+
+	/**
+	 * 添加方法
+	 */
+	public function add($data = NULL) {
+		if (is_null($data)) $data = $_POST;
+		$fields = '';
+		$values = '';
+
+		foreach ($data as $f => $v) {
+			$fields .= "`" . $this->_safe_str($f) . "`,";
+			$values .= "'" . $this->_safe_str($v) . "',";
+		}
+
+		$fields = trim($fields, ',');
+		$values = trim($values, ',');
+
+		$sql = "INSERT INTO " . $this->table . "(" . $fields . ") VALUES (" . $values . ")";
+		return $this->exe($sql);
+	}
+
+	/**
+	 * 修改方法
+	 */
+	public function update($data = NULL) {
+		if(empty($this->opt['where'])) halt('更新语句必须有where');
+		if(is_null($data)) $data = $_POST;
+
+		$values = '';
+
+		foreach ($data as $f => $v) {
+			$values .= "`" . $this->_safe_str($f) . "`='" . $this->_safe_str($v) . "',";
+		}
+
+		$values = trim($values, ',');
+		$sql = "UPDATE " . $this->table . " SET " . $values . $this->opt['where'];
+		return $this->exe($sql);
+	}
+
+	/**
+	 * 安全处理
+	 */
+	private function _safe_str($str) {
+		if (get_magic_quotes_gpc()) {
+			$str = stripcslashes($str);
+		}
+
+		return self::$link->real_escape_string($str);
 	}
 
 }

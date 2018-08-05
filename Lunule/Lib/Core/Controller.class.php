@@ -4,12 +4,14 @@
  * 基类Controller
  */
 
-class Controller 
+class Controller extends SmartyView
 {
 
 	private $var = [];
 
 	public function __construct() {
+		if(config('SMARTY_ON')) parent::__construct();
+
 		// 框架初始化方法 __init & __auto
 		if (method_exists($this, '__init')) {
 			$this->__init();
@@ -43,11 +45,7 @@ class Controller
 		die;
 	}
 
-	/**
-	 * 载入模板
-	 * @param string $tpl 模板文件名
-	 */
-	protected function display($tpl = NULL) {
+	protected function get_tpl($tpl) {
 		if (is_null($tpl)) {
 			$path = APP_TPL_PATH . '/' . CONTROLLER . '/' . ACTION . '.html';
 		} else {
@@ -56,9 +54,24 @@ class Controller
 			$path = APP_TPL_PATH . '/' . CONTROLLER . '/' . $tpl;
 		}
 
+		return $path;
+	}
+
+	/**
+	 * 载入模板
+	 * @param string $tpl 模板文件名
+	 */
+	protected function display($tpl = NULL) {
+		$path = $this->get_tpl($tpl);
+
 		if (!is_file($path)) halt($path . '模板文件不存在');
-		extract($this->var);
-		include $path;
+
+		if(config('SMARTY_ON')) {
+			parent::display($path);
+		} else {
+			extract($this->var);
+			include $path;
+		}
 	}
 
 	/**
@@ -67,7 +80,11 @@ class Controller
 	 * @param string $value 变量值
 	 */
 	protected function assign($var, $value) {
-		$this->var[$var] = $value;
+		if(config('SMARTY_ON')) {
+			parent::assign($var, $value);
+		} else {
+			$this->var[$var] = $value;
+		}
 	}
 }
 

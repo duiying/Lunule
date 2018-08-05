@@ -46,6 +46,8 @@ final class Lunule
 		define('APP_CONTROLLER_PATH', APP_PATH . '/Controller');
 		define('APP_TPL_PATH', APP_PATH . '/Tpl');
 		define('APP_PUBLIC_PATH', APP_TPL_PATH . '/Public');
+		define('APP_COMPILE_PATH', TEMP_PATH . '/' . APP_NAME . '/Compile');
+		define('APP_CACHE_PATH', TEMP_PATH . '/' . APP_NAME . '/Cache');
 
 		// 公共目录
 		define('COMMON_PATH', ROOT_PATH . '/Common');
@@ -83,6 +85,9 @@ final class Lunule
 			APP_CONTROLLER_PATH,
 			APP_TPL_PATH,
 			APP_PUBLIC_PATH,
+			APP_COMPILE_PATH,
+			APP_CACHE_PATH,
+
 
 			TEMP_PATH,
 			LOG_PATH,
@@ -109,6 +114,8 @@ final class Lunule
 		$fileArr = [
 			FUNCTION_PATH . '/function.php',
 			CORE_PATH . '/Log.class.php',
+			ORG_PATH . '/Smarty/Smarty.class.php',
+			CORE_PATH . '/SmartyView.class.php',
 			CORE_PATH . '/Controller.class.php',
 			CORE_PATH . '/Application.class.php',
 		];
