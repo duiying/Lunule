@@ -1,0 +1,39 @@
+{include file="../Common/head.html"}
+<body>
+    <!--搜索结果页面 列表 开始-->
+    <form action="#" method="post">
+
+        <div class="result_wrap">
+            <div class="result_content">
+                <table class="list_tab">
+                    <tr>
+                        <th width="4%"><strong>ID</strong></th>
+                        <th><strong>栏目名称</strong></th>
+                        <th width="20%"><strong>操作</strong></th>
+                    </tr>
+                    {foreach $data as $v}
+                    <tr>
+                        <td>{$v.cid}</td>
+                        <td>
+                           {$v.cname}
+                        </td>
+                        <td>
+                            <a href="{$smarty.const.__APP__}?c=Category&a=edit&cid={$v.cid}">编辑</a> <a>|</a>
+                            <a href="javascript:;" onclick="del({$v.cid});">删除</a>
+                        </td>
+                    </tr>
+                    {/foreach}
+                </table>
+            </div>
+        </div>
+    </form>
+    <!--搜索结果页面 列表 结束-->
+
+</body>
+<script>
+    //删除
+    function del(id) {
+        dialog.confirm('确定删除吗?', '{$smarty.const.__APP__}?c=Category&a=del_data', '{$smarty.const.__APP__}?c=Category&r=' + Math.random(), id);
+    }
+</script>
+</html>

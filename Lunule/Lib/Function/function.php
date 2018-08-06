@@ -125,6 +125,7 @@ function config($var = NULL, $value = NULL) {
 /**
  * 实例化模型类
  * @param string $table 表名
+ * @return object 实例化模型
  */
 function model($table) {
 	$obj = new Model($table);
@@ -134,10 +135,36 @@ function model($table) {
 /**
  * 实例化扩展模型类
  * @param string $model 扩展模型
+ * @return object 实例化模型
  */
 function ext_model($model) {
 	$model .= 'Model';
 	return new $model;
+}
+
+/**
+ * 系统基本信息
+ * @return array
+ */
+function basicInfo() {
+	$basicInfo 				= [];
+	$basicInfo['system'] 	= PHP_OS;
+	$basicInfo['server'] 	= $_SERVER['SERVER_SOFTWARE'];
+	$basicInfo['version'] 	= 'V1.0';
+	$basicInfo['filesize'] 	= get_cfg_var("upload_max_filesize") ? get_cfg_var("upload_max_filesize") : "不允许上传附件";
+	$basicInfo['time']		= date('Y/m/d H:i:s');
+	$basicInfo['ip']		= $_SERVER['SERVER_ADDR'];
+	return $basicInfo;
+}
+
+/**
+ * 返回json
+ * @return
+ */
+function ajaxReturn($code, $msg) {
+	$json =  json_encode(['code' => $code, 'msg' => $msg]);
+	echo $json;
+	return;
 }
 
 ?>

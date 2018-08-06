@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * 基类Model
+ */
+
 class Model 
 {
 
@@ -62,7 +66,6 @@ class Model
 	 * @param string $sql SQL语句
 	 */
 	public function query($sql) {
-		echo $sql;
 		self::$sqls[] = $sql;
 		$link = self::$link;
 		$res = $link->query($sql);
@@ -73,6 +76,11 @@ class Model
 			$rows[] = $row;
 		}
 		$res->free();
+
+		// 初始化sql
+		$this->_opt();
+
+		// 返回结果集
 		return $rows;
 	}
 
@@ -98,6 +106,7 @@ class Model
 
 	/**
 	 * 查询所有数据
+	 * @return array 结果集数组
 	 */
 	public function all() {
 		$sql = 'SELECT ' . $this->opt['field'] . ' FROM ' . $this->table . $this->opt['where'] . $this->opt['group'] . $this->opt['having'] . $this->opt['order']. $this->opt['limit'];
@@ -106,6 +115,7 @@ class Model
 
 	/**
 	 * 查询所有数据 all的别名
+	 * @return array 结果集数组
 	 */
 	public function findAll() {
 		return $this->all();
@@ -114,24 +124,45 @@ class Model
 	/**
 	 * 指定field
 	 * @param string $field
+	 * @return object 对象
 	 */
 	public function field($field) {
-		$this->opt['field'] = $field;
+		if (is_array($field)) {
+			if (count($field) == 0) return $this;
+			$str = '';
+			foreach ($field as $k => $v) {
+				$str .= $v . ',';
+			}
+			$this->opt['field'] = trim($str, ',');
+		} else {
+			$this->opt['field'] = $field;
+		}
 		return $this;
 	}
 
 	/**
 	 * 指定where
 	 * @param string $where
+	 * @return object 对象
 	 */
 	public function where($where) {
-		$this->opt['where'] = " WHERE " . $where;
+		if (is_array($where)) {
+			if (count($where) == 0) return $this;
+			$str = " WHERE 1 = 1 ";
+			foreach ($where as $k => $v) {
+				$str .= " AND " . "`" . $k . "` = " . "'$v'"; 	
+			}
+			$this->opt['where'] = $str;
+		} else {
+			$this->opt['where'] = " WHERE " . $where;
+		}
 		return $this;
 	}
 
 	/**
-	 * 指定order
-	 * @param string $order
+	 * order
+	 * @param string $order order条件
+	 * @return object 对象
 	 */
 	public function order($order) {
 		$this->opt['order'] = " ORDER BY " . $order;
@@ -140,7 +171,8 @@ class Model
 
 	/**
 	 * limit
-	 * @param string $limit 字段
+	 * @param string $limit limit条件
+	 * @return object 对象
 	 */
 	public function limit($limit) {
 		$this->opt['limit'] = " LIMIT " . $limit;
@@ -148,8 +180,8 @@ class Model
 	}
 
 	/**
-	 * find 返回一维数组
-	 * @param string $limit 字段
+	 * find
+	 * @return array 一维结果数组
 	 */
 	public function find() {
 		$data = $this->limit(1)->all();
@@ -158,15 +190,16 @@ class Model
 	}
 
 	/**
-	 * one 返回一维数组 find方法的别名
-	 * @param string $limit 字段
+	 * one find方法的别名
+	 * @return array 一维结果数组
 	 */
 	public function one() {
 		return $this->find();
 	}
 
 	/**
-	 * delete 
+	 * delete
+	 * @return integer 受影响的记录条数
 	 */
 	public function delete() {
 		if (empty($this->opt['where'])) halt('删除语句必须有sql语句');
@@ -176,12 +209,13 @@ class Model
 
 	/**
 	 * 添加方法
+	 * @param array $data 要添加的数据
+	 * @return integer 新插入数据的id
 	 */
-	public function add($data = NULL) {
-		if (is_null($data)) $data = $_POST;
+	public function add($data = []) {
+		if (empty($data)) $data = $_POST;
 		$fields = '';
 		$values = '';
-
 		foreach ($data as $f => $v) {
 			$fields .= "`" . $this->_safe_str($f) . "`,";
 			$values .= "'" . $this->_safe_str($v) . "',";
@@ -195,11 +229,13 @@ class Model
 	}
 
 	/**
-	 * 修改方法
+	 * 更新方法
+	 * @param array $data 要更新的数据
+	 * @return integer 受影响的记录条数
 	 */
-	public function update($data = NULL) {
+	public function update($data = []) {
 		if(empty($this->opt['where'])) halt('更新语句必须有where');
-		if(is_null($data)) $data = $_POST;
+		if(empty($data)) $data = $_POST;
 
 		$values = '';
 
@@ -214,6 +250,8 @@ class Model
 
 	/**
 	 * 安全处理
+	 * @param string $str 要处理的字符串
+	 * @return string 安全处理过的字符串
 	 */
 	private function _safe_str($str) {
 		if (get_magic_quotes_gpc()) {

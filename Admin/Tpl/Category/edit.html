@@ -1,0 +1,33 @@
+{include file="../Common/head.html"}
+<body>
+    <div class="result_wrap">
+        <form method="post" id="dataSet" onsubmit="return present();">
+            <input type="hidden" name="cid" value="{$smarty.get.cid}">
+            <table class="add_tab">
+                <tbody>
+                <tr>
+                    <th width="120">栏目名称：</th>
+                    <td>
+                        <input type="text" name="cname" id="cname" value="{$info.cname}"required><span>必填</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th></th>
+                    <td>
+                        <input type="submit" value="提交" class="btn-blue">
+                        <input type="button" class="back btn-blue" onclick="history.go(-1)" value="返回">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</body>
+<script type="text/javascript">
+    //数据提交
+    function present() {
+        dialog.presentForm("{$smarty.const.__APP__}?c=Category&a=edit_data", "{$smarty.const.__APP__}?c=Category");
+        return false;
+    }
+</script>
+</html>

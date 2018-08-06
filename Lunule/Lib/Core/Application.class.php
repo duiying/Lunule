@@ -1,11 +1,12 @@
 <?php
 
 /**
- * 应用类
+ * 应用核心类
  */
 
 final class Application
 {
+
 	public static function run() {
 		header('Content-type:text/html;charset=utf-8');
 		self::_init();
@@ -114,16 +115,24 @@ str;
 	private static function _set_url() {
 		$path = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
 		$path = str_replace('\\', '/', $path);
+		// localhost/Lunule/index.php 或者 localhost/Lunule/admin.php
 		define('__APP__', $path);
+		// localhost/Lunule
 		define('__ROOT__', dirname(__APP__));
+		// localhost/Lunule/Index/Tpl 或者 localhost/Lunule/Admin/Tpl
 		define('__TPL__', __ROOT__ . '/' . APP_NAME . '/Tpl');
-		define('__PUBLIC__', __TPL__ . '/Public');
+		// localhost/Lunule/Static
+		define('__STATIC__', __ROOT__ . '/Static');
 	}
 
 	/**
 	 * 自动载入功能
+	 * @param string $className 类名
 	 */
 	private static function _autoload($className) {
+		// 如果是XxController格式的类名,先去应用控制器目录下加载文件,不存在的话加载应用控制器目录下的EmptyController,EmptyController如果不存在则打印错误信息
+		// 如果是XxModel格式的类名,去公共模型目录下加载文件
+		// 其他情况一律加载工具类库目录下的文件,文件不存在则打印错误信息
 		switch (true) {
 			case strlen($className) > 10 && substr($className, -10) == 'Controller':
 				$path = APP_CONTROLLER_PATH . '/' . $className . '.class.php';
@@ -141,6 +150,7 @@ str;
 
 			case strlen($className) > 5 && substr($className, -5) == 'Model':
 				$path = COMMON_MODEL_PATH . '/' . $className . '.class.php';
+				if (!is_file($path)) halt($path . '模型未找到'); 
 				include $path;
 				break;
 
@@ -164,7 +174,7 @@ class IndexController extends Controller
 {
 	public function index() {
 		header('Content-type:text/html;charset=utf-8');
-		echo '欢迎使用';
+		echo '<style type="text/css">div{margin-top:50px;margin-left:50px;}</style><div><h1>:)</h1><h2>欢迎使用 Lunule!</h2><h3>版本 V' . LUNULE_VERSION . '</h3></div>';
 	}
 }	
 str;
@@ -175,6 +185,8 @@ str;
 	 * 实例化指定控制器
 	 */
 	private static function _app_run() {
+		// 路由格式为 localhost/Lunule/index.php?c=Index&a=index
+		// 默认控制器为IndexController 默认方法为index
 		$c = isset($_GET[config('VAR_CONTROLLER')]) ? $_GET[config('VAR_CONTROLLER')] : 'Index';
 		$a = isset($_GET[config('VAR_ACTION')]) ? $_GET[config('VAR_ACTION')] : 'index';
 		
@@ -183,7 +195,8 @@ str;
 
 		$c .= 'Controller';
 
-
+		// 控制器不存在则调用EmptyController的index方法
+		// 控制器存在,方法不存在则调用控制器的__empty方法,__empty方法不存在则打印错误信息
 		if (class_exists($c)) {
 			$obj = new $c();
 			if (!method_exists($obj, $a)) {

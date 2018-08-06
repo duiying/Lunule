@@ -17,7 +17,7 @@ class Controller extends SmartyView
 			$this->__init();
 		}
 		if (method_exists($this, '__auto')) {
-			$this->__init();
+			$this->__auto();
 		}
 	}
 
@@ -45,9 +45,18 @@ class Controller extends SmartyView
 		die;
 	}
 
+	/**
+	 * 获取模板路径
+	 * @param string $tpl 模板名称
+	 * @return string $path 模板路径
+	 */
 	protected function get_tpl($tpl) {
+
+		// 如果模板名为空,模板名称为 方法.html
 		if (is_null($tpl)) {
 			$path = APP_TPL_PATH . '/' . CONTROLLER . '/' . ACTION . '.html';
+
+		// index.html => index.html index => index.html
 		} else {
 			$suffix = strrchr($tpl, '.');
 			$tpl = empty($suffix) ? $tpl . '.html' : $tpl;
